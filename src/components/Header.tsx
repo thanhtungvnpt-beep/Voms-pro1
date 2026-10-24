@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   AlertTriangle, Zap, Volume2, VolumeX, FileDown, 
-  Sparkles, RefreshCw, Clock, Radio, Activity
+  Sparkles, RefreshCw, Clock, Radio, Activity, Menu
 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
@@ -15,6 +15,8 @@ interface HeaderProps {
   isMobileMode: boolean;
   isAiIntervened: boolean;
   adverseCount: number;
+  isSidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -26,7 +28,9 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleMobileMode,
   isMobileMode,
   isAiIntervened,
-  adverseCount
+  adverseCount,
+  isSidebarCollapsed,
+  onToggleSidebar
 }) => {
   const [timeStr, setTimeStr] = useState<string>('');
   const [isMuted, setIsMuted] = useState<boolean>(!soundManager.enabled);
@@ -54,9 +58,22 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="h-14 border-b border-slate-800/80 px-5 flex items-center justify-between bg-[#0d1321]/80 backdrop-blur-md z-10 shrink-0">
-      {/* Left: Title & Live Indicators */}
+    <header className="h-14 border-b border-slate-800/80 px-4 sm:px-5 flex items-center justify-between bg-[#0d1321]/80 backdrop-blur-md z-10 shrink-0">
+      {/* Left: Menu Toggle, Title & Live Indicators */}
       <div className="flex items-center space-x-3 text-xs overflow-hidden">
+        {onToggleSidebar && (
+          <button
+            onClick={() => {
+              soundManager.playClick();
+              onToggleSidebar();
+            }}
+            title={isSidebarCollapsed ? 'Mở rộng menu (Expand Sidebar)' : 'Thu gọn menu (Collapse Sidebar)'}
+            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-slate-700 transition shrink-0"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
+        )}
+
         <div className="flex items-center space-x-2 text-white font-bold tracking-wide">
           <Activity className="w-4 h-4 text-cyan-400 shrink-0" />
           <span className="truncate hidden sm:inline">TỔNG QUAN ĐIỀU HÀNH SẢN XUẤT TOÀN CHUỖI CUNG ỨNG</span>

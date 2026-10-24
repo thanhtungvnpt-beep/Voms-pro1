@@ -70,6 +70,7 @@ export default function App() {
   // Simulation Status
   const [isAiIntervened, setIsAiIntervened] = useState<boolean>(false);
   const [isMobileMode, setIsMobileMode] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
 
   // Derived Totals
   const totalActual = plants.reduce((sum, p) => sum + p.actual, 0);
@@ -263,6 +264,8 @@ export default function App() {
         onSelectTab={(tabId) => setCurrentTab(tabId)}
         onOpenHourlyModal={() => setIsHourlyModalOpen(true)}
         isAiIntervened={isAiIntervened}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed(prev => !prev)}
       />
 
       {/* 2. MAIN VIEWPORT */}
@@ -279,6 +282,8 @@ export default function App() {
           isMobileMode={isMobileMode}
           isAiIntervened={isAiIntervened}
           adverseCount={adverseCount}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebar={() => setIsSidebarCollapsed(prev => !prev)}
         />
 
         {/* Dynamic Content Area */}
