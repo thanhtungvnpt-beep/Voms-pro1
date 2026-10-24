@@ -1,0 +1,6 @@
+{
+  "name": "Neural Link Pro — Production Control Center",
+  "description": "Trung tâm Điều hành Sản xuất & Causal AI GMES v4.2 cho chuỗi cung ứng 7 nhà máy vệ tinh tuân thủ chuẩn ISO 9001 / IATF 16949.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
