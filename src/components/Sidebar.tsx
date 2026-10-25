@@ -1,10 +1,9 @@
-import React from 'react';
 import { 
   Activity, Layers, TrendingUp, Truck, ShieldCheck, 
   Users, Wrench, Database, Cpu, FileText, CheckCircle2,
   Sparkles, Radio, Smartphone, RefreshCw, Settings, 
   Eye, FileSignature, Box, Terminal, ChevronLeft, ChevronRight,
-  Menu
+  Menu, FileCheck, ShieldAlert, Bot, Target
 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
@@ -29,6 +28,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
     soundManager.playClick();
     onSelectTab(tabId);
   };
+
+  const trustItems = [
+    { id: 'data_trust', label: 'Data Trust Center', icon: ShieldCheck, badge: 'Phase 1' },
+    { id: 'audit_approvals', label: 'HITL & Audit Trail', icon: FileCheck, badge: 'RBAC' },
+  ];
+
+  const phase3Items = [
+    { id: 'ai_control_tower', label: 'AI Control Tower (P3)', icon: Cpu, badge: 'HITL' },
+  ];
+
+  const phase4Items = [
+    { id: 'automation_center', label: 'Tự động hóa & RPA (P4)', icon: Bot, badge: 'AUTO' },
+  ];
+
+  const phase5Items = [
+    { id: 'operational_intelligence', label: 'Trí tuệ Vận hành (P5)', icon: Target, badge: 'INTEL' },
+  ];
 
   const navItems = [
     { id: 'overview', label: '01. Tổng quan điều hành', icon: Activity, badge: isAiIntervened ? 'AI Active' : undefined },
@@ -180,6 +196,206 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {item.criticalBadge}
                       </span>
                     )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Phase 1 Trust Foundation Header */}
+          {!isCollapsed ? (
+            <div className="pt-3 px-3 py-1 text-[10px] font-bold text-purple-400/90 tracking-wider uppercase flex items-center justify-between">
+              <span>NỀN TẢNG TIN CẬY (PHASE 1)</span>
+              <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1 py-0.2 rounded font-mono">
+                TRUST
+              </span>
+            </div>
+          ) : (
+            <div className="my-2 border-t border-purple-900/60 mx-1" />
+          )}
+
+          {trustItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentTab === item.id;
+            return (
+              <div key={item.id} className="relative group">
+                <button
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center rounded-lg transition text-left text-xs font-medium ${
+                    isCollapsed 
+                      ? 'justify-center px-0 py-2.5' 
+                      : 'justify-between px-3 py-2'
+                  } ${
+                    isActive 
+                      ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm shadow-purple-500/10 font-bold' 
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                  }`}
+                >
+                  <div className={`flex items-center truncate ${isCollapsed ? 'justify-center' : 'space-x-2.5'}`}>
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-purple-300' : 'text-purple-400'}`} />
+                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                  </div>
+
+                  {!isCollapsed && item.badge && (
+                    <span className="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/40 px-1.5 py-0.2 rounded font-mono font-semibold">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-slate-900/98 border border-slate-700 text-white text-xs rounded-xl shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-150 z-50">
+                    <span className="font-semibold">{item.label}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Phase 3 AI Control Tower Header */}
+          {!isCollapsed ? (
+            <div className="pt-3 px-3 py-1 text-[10px] font-bold text-cyan-400 tracking-wider uppercase flex items-center justify-between">
+              <span>ĐIỀU HÀNH AI (PHASE 3)</span>
+              <span className="text-[9px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-1 py-0.2 rounded font-mono">
+                TOWER
+              </span>
+            </div>
+          ) : (
+            <div className="my-2 border-t border-cyan-900/60 mx-1" />
+          )}
+
+          {phase3Items.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentTab === item.id;
+            return (
+              <div key={item.id} className="relative group">
+                <button
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center rounded-lg transition text-left text-xs font-medium ${
+                    isCollapsed 
+                      ? 'justify-center px-0 py-2.5' 
+                      : 'justify-between px-3 py-2'
+                  } ${
+                    isActive 
+                      ? 'bg-gradient-to-r from-cyan-600/30 to-purple-600/30 text-white border border-cyan-400 shadow-md shadow-cyan-500/20 font-bold' 
+                      : 'text-cyan-300 hover:text-white hover:bg-slate-800/80 border border-cyan-900/30'
+                  }`}
+                >
+                  <div className={`flex items-center truncate ${isCollapsed ? 'justify-center' : 'space-x-2.5'}`}>
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-cyan-300 animate-pulse' : 'text-cyan-400'}`} />
+                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                  </div>
+
+                  {!isCollapsed && item.badge && (
+                    <span className="text-[9px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-1.5 py-0.2 rounded font-mono font-bold">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-slate-900/98 border border-slate-700 text-white text-xs rounded-xl shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-150 z-50">
+                    <span className="font-semibold">{item.label}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Phase 4 Intelligent Automation & RPA Header */}
+          {!isCollapsed ? (
+            <div className="pt-3 px-3 py-1 text-[10px] font-bold text-emerald-400 tracking-wider uppercase flex items-center justify-between">
+              <span>TỰ ĐỘNG HÓA &amp; RPA (PHASE 4)</span>
+              <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-1 py-0.2 rounded font-mono">
+                AUTO
+              </span>
+            </div>
+          ) : (
+            <div className="my-2 border-t border-emerald-900/60 mx-1" />
+          )}
+
+          {phase4Items.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentTab === item.id;
+            return (
+              <div key={item.id} className="relative group">
+                <button
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center rounded-lg transition text-left text-xs font-medium ${
+                    isCollapsed 
+                      ? 'justify-center px-0 py-2.5' 
+                      : 'justify-between px-3 py-2'
+                  } ${
+                    isActive 
+                      ? 'bg-gradient-to-r from-emerald-600/30 to-cyan-600/30 text-white border border-emerald-400 shadow-md shadow-emerald-500/20 font-bold' 
+                      : 'text-emerald-300 hover:text-white hover:bg-slate-800/80 border border-emerald-900/30'
+                  }`}
+                >
+                  <div className={`flex items-center truncate ${isCollapsed ? 'justify-center' : 'space-x-2.5'}`}>
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-300 animate-pulse' : 'text-emerald-400'}`} />
+                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                  </div>
+
+                  {!isCollapsed && item.badge && (
+                    <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.2 rounded font-mono font-bold">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-slate-900/98 border border-slate-700 text-white text-xs rounded-xl shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-150 z-50">
+                    <span className="font-semibold">{item.label}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Phase 5 Operational Intelligence & Closed-Loop Header */}
+          {!isCollapsed ? (
+            <div className="pt-3 px-3 py-1 text-[10px] font-bold text-amber-400 tracking-wider uppercase flex items-center justify-between">
+              <span>TRÍ TUỆ VẬN HÀNH (PHASE 5)</span>
+              <span className="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1 py-0.2 rounded font-mono">
+                INTEL
+              </span>
+            </div>
+          ) : (
+            <div className="my-2 border-t border-amber-900/60 mx-1" />
+          )}
+
+          {phase5Items.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentTab === item.id;
+            return (
+              <div key={item.id} className="relative group">
+                <button
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center rounded-lg transition text-left text-xs font-medium ${
+                    isCollapsed 
+                      ? 'justify-center px-0 py-2.5' 
+                      : 'justify-between px-3 py-2'
+                  } ${
+                    isActive 
+                      ? 'bg-gradient-to-r from-amber-600/30 to-amber-700/30 text-white border border-amber-400 shadow-md shadow-amber-500/20 font-bold' 
+                      : 'text-amber-300 hover:text-white hover:bg-slate-800/80 border border-amber-900/30'
+                  }`}
+                >
+                  <div className={`flex items-center truncate ${isCollapsed ? 'justify-center' : 'space-x-2.5'}`}>
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-amber-300 animate-pulse' : 'text-amber-400'}`} />
+                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                  </div>
+
+                  {!isCollapsed && item.badge && (
+                    <span className="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded font-mono font-bold">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-slate-900/98 border border-slate-700 text-white text-xs rounded-xl shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-150 z-50">
+                    <span className="font-semibold">{item.label}</span>
                   </div>
                 )}
               </div>

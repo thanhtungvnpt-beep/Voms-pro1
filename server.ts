@@ -3,6 +3,10 @@ import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import path from 'path';
 import { GoogleGenAI } from '@google/genai';
+import { trustRouter } from './src/server/trustServices';
+import { controlTowerRouter } from './src/server/controlTowerServices';
+import { automationRouter } from './src/server/automationServices';
+import { operationalIntelligenceRouter } from './src/server/operationalIntelligenceServices';
 
 dotenv.config();
 
@@ -11,6 +15,11 @@ const PORT = Number(process.env.PORT) || 3000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 app.use(express.json());
+app.use('/api/v1', trustRouter);
+app.use('/api/v1/control-tower', controlTowerRouter);
+app.use('/api/v1/automation', automationRouter);
+app.use('/api/v1/phase5', operationalIntelligenceRouter);
+app.use('/api/v1/operational-intelligence', operationalIntelligenceRouter);
 
 // In-memory Database for Production Telemetry
 let PLANTS_DB = [

@@ -39,6 +39,19 @@ import { NeuralLinkCausalDeepDive } from './components/modules/NeuralLinkCausalD
 import { ReportsAnalyticsModule } from './components/modules/ReportsAnalyticsModule';
 import { SystemSettingsModule } from './components/modules/SystemSettingsModule';
 
+// Phase 1 Trust Foundation Modules
+import { DataTrustCenterModule } from './components/modules/DataTrustCenterModule';
+import { AuditLogApprovalModule } from './components/modules/AuditLogApprovalModule';
+
+// Phase 3 AI Control Tower & Human-in-the-Loop Gateway
+import { AiControlTowerModule } from './components/modules/AiControlTowerModule';
+
+// Phase 4 Intelligent Automation, API/RPA Integration & Workflow Orchestration
+import { AutomationControlModule } from './components/modules/AutomationControlModule';
+
+// Phase 5 Operational Intelligence & Closed-Loop Optimization
+import { OperationalIntelligenceModule } from './components/modules/OperationalIntelligenceModule';
+
 // Dedicated Modules - Develop
 import { DevelopHomeModule } from './components/modules/DevelopHomeModule';
 import { ScreenLibraryModule } from './components/modules/ScreenLibraryModule';
@@ -71,6 +84,18 @@ export default function App() {
   const [isAiIntervened, setIsAiIntervened] = useState<boolean>(false);
   const [isMobileMode, setIsMobileMode] = useState<boolean>(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+
+  // Navigation listener for cross-module deep-linking
+  React.useEffect(() => {
+    const handleNavigateTab = (e: any) => {
+      if (e.detail) {
+        soundManager.playClick();
+        setCurrentTab(e.detail);
+      }
+    };
+    window.addEventListener('voms-navigate-tab', handleNavigateTab);
+    return () => window.removeEventListener('voms-navigate-tab', handleNavigateTab);
+  }, []);
 
   // Derived Totals
   const totalActual = plants.reduce((sum, p) => sum + p.actual, 0);
@@ -438,6 +463,31 @@ export default function App() {
           {/* M12: Cài đặt hệ thống & Cấu hình tham số */}
           {!isMobileMode && currentTab === 'settings' && (
             <SystemSettingsModule />
+          )}
+
+          {/* Phase 1: Data Trust & Quality Governance Center */}
+          {!isMobileMode && currentTab === 'data_trust' && (
+            <DataTrustCenterModule />
+          )}
+
+          {/* Phase 1: Human-in-the-Loop & Immutable Audit Trail */}
+          {!isMobileMode && currentTab === 'audit_approvals' && (
+            <AuditLogApprovalModule />
+          )}
+
+          {/* Phase 3: AI Control Tower & Human-in-the-Loop Gateway */}
+          {!isMobileMode && currentTab === 'ai_control_tower' && (
+            <AiControlTowerModule />
+          )}
+
+          {/* Phase 4: Intelligent Automation, API/RPA Integration & Workflow Orchestration */}
+          {!isMobileMode && currentTab === 'automation_center' && (
+            <AutomationControlModule />
+          )}
+
+          {/* Phase 5: Operational Intelligence & Closed-Loop Optimization */}
+          {!isMobileMode && currentTab === 'operational_intelligence' && (
+            <OperationalIntelligenceModule />
           )}
 
           {/* Phân hệ Develop: Develop Home */}
