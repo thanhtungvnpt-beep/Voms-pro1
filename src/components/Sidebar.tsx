@@ -3,7 +3,7 @@ import {
   Users, Wrench, Database, Cpu, FileText, CheckCircle2,
   Sparkles, Radio, Smartphone, RefreshCw, Settings, 
   Eye, FileSignature, Box, Terminal, ChevronLeft, ChevronRight,
-  Menu, FileCheck, ShieldAlert, Bot, Target
+  Menu, FileCheck, ShieldAlert, Bot, Target, Globe
 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
@@ -46,6 +46,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'operational_intelligence', label: 'Trí tuệ Vận hành (P5)', icon: Target, badge: 'INTEL' },
   ];
 
+  const phase6Items = [
+    { id: 'mobile_field_assistant', label: 'Trợ lý Hiện trường (P6)', icon: Smartphone, badge: 'FIELD' },
+  ];
+
   const navItems = [
     { id: 'overview', label: '01. Tổng quan điều hành', icon: Activity, badge: isAiIntervened ? 'AI Active' : undefined },
     { id: 'gantt', label: '02. Kế hoạch sản xuất (M02)', icon: Layers, isM02: true },
@@ -59,6 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'causal_ai', label: '10. Phân tích AI Causal (M10)', icon: Cpu, isAi: true },
     { id: 'reports', label: '11. Báo cáo ISO/IATF (M11)', icon: FileText },
     { id: 'settings', label: '12. Cài đặt hệ thống (M12)', icon: Settings },
+    { id: 'plant_geo_map', label: '13. Bản đồ Địa lý Vệ tinh (D3)', icon: Globe, badge: 'MAP' },
   ];
 
   const devItems = [
@@ -388,6 +393,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                   {!isCollapsed && item.badge && (
                     <span className="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded font-mono font-bold">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-slate-900/98 border border-slate-700 text-white text-xs rounded-xl shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-150 z-50">
+                    <span className="font-semibold">{item.label}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Phase 6 AI Field Assistant & Mobile Intelligence Header */}
+          {!isCollapsed ? (
+            <div className="pt-3 px-3 py-1 text-[10px] font-bold text-blue-400 tracking-wider uppercase flex items-center justify-between">
+              <span>TRỢ LÝ HIỆN TRƯỜNG (PHASE 6)</span>
+              <span className="text-[9px] bg-blue-500/20 text-blue-300 border border-blue-500/40 px-1 py-0.2 rounded font-mono">
+                FIELD
+              </span>
+            </div>
+          ) : (
+            <div className="my-2 border-t border-blue-900/60 mx-1" />
+          )}
+
+          {phase6Items.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentTab === item.id;
+            return (
+              <div key={item.id} className="relative group">
+                <button
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center rounded-lg transition text-left text-xs font-medium ${
+                    isCollapsed 
+                      ? 'justify-center px-0 py-2.5' 
+                      : 'justify-between px-3 py-2'
+                  } ${
+                    isActive 
+                      ? 'bg-gradient-to-r from-blue-600/30 to-indigo-700/30 text-white border border-blue-400 shadow-md shadow-blue-500/20 font-bold' 
+                      : 'text-blue-300 hover:text-white hover:bg-slate-800/80 border border-blue-900/30'
+                  }`}
+                >
+                  <div className={`flex items-center truncate ${isCollapsed ? 'justify-center' : 'space-x-2.5'}`}>
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-300 animate-pulse' : 'text-blue-400'}`} />
+                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                  </div>
+
+                  {!isCollapsed && item.badge && (
+                    <span className="text-[9px] bg-blue-500/20 text-blue-300 border border-blue-500/40 px-1.5 py-0.2 rounded font-mono font-bold">
                       {item.badge}
                     </span>
                   )}

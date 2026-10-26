@@ -9,6 +9,8 @@ import {
 } from './types';
 import { soundManager } from './utils/audio';
 
+import { Globe, Activity } from 'lucide-react';
+
 // Components
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
@@ -18,6 +20,7 @@ import { AiInsightPanel } from './components/AiInsightPanel';
 import { DriverAnalysisCard } from './components/DriverAnalysisCard';
 import { ForecastSimulationCard } from './components/ForecastSimulationCard';
 import { EmergencyActionsCard } from './components/EmergencyActionsCard';
+import { PlantGeolocationMap } from './components/PlantGeolocationMap';
 
 // Modals
 import { HourlyTrendModal } from './components/HourlyTrendModal';
@@ -52,6 +55,9 @@ import { AutomationControlModule } from './components/modules/AutomationControlM
 // Phase 5 Operational Intelligence & Closed-Loop Optimization
 import { OperationalIntelligenceModule } from './components/modules/OperationalIntelligenceModule';
 
+// Phase 6 AI Field Assistant & Mobile Intelligence
+import { MobileFieldAssistantModule } from './components/modules/MobileFieldAssistantModule';
+
 // Dedicated Modules - Develop
 import { DevelopHomeModule } from './components/modules/DevelopHomeModule';
 import { ScreenLibraryModule } from './components/modules/ScreenLibraryModule';
@@ -71,6 +77,7 @@ export default function App() {
 
   // Navigation & Filtering
   const [currentTab, setCurrentTab] = useState<string>('overview');
+  const [overviewDisplayMode, setOverviewDisplayMode] = useState<'dag' | 'geomap'>('dag');
   const [filterMode, setFilterMode] = useState<'all' | 'adverse'>('all');
   const [selectedLink, setSelectedLink] = useState<CausalLink | null>(null);
   const [selectedPlant, setSelectedPlant] = useState<PlantMetric | null>(null);
@@ -335,21 +342,71 @@ export default function App() {
                 onSelectPlant={(plant) => setSelectedPlant(plant)}
               />
 
-              {/* Row 2: Middle Split - Interactive Causal DAG Graph (9 Cols) & AI Insight (3 Cols) */}
+              {/* View Switcher Bar: Causal DAG vs D3 Geolocation Map */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 gap-2 text-xs font-mono">
+                <div className="flex items-center space-x-2 text-slate-400">
+                  <span className="font-bold text-white uppercase tracking-wider">Chế độ phân tích:</span>
+                  <span className="text-cyan-400">
+                    {overviewDisplayMode === 'dag' 
+                      ? '● Mạng Suy Luận Nhân Quả Đa Tầng (Causal DAG 9 Nodes)' 
+                      : '● Bản Đồ Địa Lý D3.js 7 Nhà Máy Vệ Tinh & Luồng Tuyến Logistics'}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-1.5 self-start sm:self-auto">
+                  <button
+                    onClick={() => { soundManager.playClick(); setOverviewDisplayMode('dag'); }}
+                    className={`px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition font-bold ${
+                      overviewDisplayMode === 'dag'
+                        ? 'bg-cyan-600/30 text-cyan-300 border border-cyan-500/50 shadow'
+                        : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+                    }`}
+                  >
+                    <Activity className="w-3.5 h-3.5" />
+                    <span>Mạng Causal DAG</span>
+                  </button>
+                  <button
+                    onClick={() => { soundManager.playClick(); setOverviewDisplayMode('geomap'); }}
+                    className={`px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition font-bold ${
+                      overviewDisplayMode === 'geomap'
+                        ? 'bg-cyan-600/30 text-cyan-300 border border-cyan-500/50 shadow'
+                        : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+                    }`}
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>Bản Đồ Địa Lý D3.js</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Row 2: Middle Split - Interactive Causal DAG / D3 Map (9 Cols) & AI Insight (3 Cols) */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-[460px]">
                 <div className="lg:col-span-9 h-full">
-                  <CausalDagGraph
-                    nodes={nodes}
-                    links={links}
-                    filterMode={filterMode}
-                    onSetFilterMode={(mode) => setFilterMode(mode)}
-                    selectedLink={selectedLink}
-                    onSelectLink={(link) => setSelectedLink(link)}
-                    onOpenHourlyModal={() => setIsHourlyModalOpen(true)}
-                    onExecuteLinkAction={(actId) => handleExecuteAction(actId)}
-                    totalActual={totalActual}
-                    totalDeficit={totalDeficit}
-                  />
+                  {overviewDisplayMode === 'dag' ? (
+                    <CausalDagGraph
+                      nodes={nodes}
+                      links={links}
+                      filterMode={filterMode}
+                      onSetFilterMode={(mode) => setFilterMode(mode)}
+                      selectedLink={selectedLink}
+                      onSelectLink={(link) => setSelectedLink(link)}
+                      onOpenHourlyModal={() => setIsHourlyModalOpen(true)}
+                      onExecuteLinkAction={(actId) => handleExecuteAction(actId)}
+                      totalActual={totalActual}
+                      totalDeficit={totalDeficit}
+                    />
+                  ) : (
+                    <PlantGeolocationMap
+                      onSelectPlant={(plantId) => {
+                        const target = plants.find(p => p.id === plantId) || null;
+                        setSelectedPlant(target);
+                      }}
+                      onOpenPlantModal={(plantId) => {
+                        const target = plants.find(p => p.id === plantId) || null;
+                        setSelectedPlant(target);
+                      }}
+                      className="h-full"
+                    />
+                  )}
                 </div>
 
                 <div className="lg:col-span-3 h-full">
@@ -359,6 +416,11 @@ export default function App() {
                     onSelectBottleneck={(nodeId) => {
                       const link = links.find(l => l.from === nodeId);
                       if (link) setSelectedLink(link);
+                    }}
+                    selectedPlantId={selectedPlant?.id}
+                    onSelectPlant={(plantId) => {
+                      const target = plants.find(p => p.id === plantId) || null;
+                      setSelectedPlant(target);
                     }}
                   />
                 </div>
@@ -465,6 +527,28 @@ export default function App() {
             <SystemSettingsModule />
           )}
 
+          {/* M13: Bản đồ Địa lý Vệ tinh 7 Nhà máy (D3.js Geolocation Map) */}
+          {!isMobileMode && currentTab === 'plant_geo_map' && (
+            <div className="space-y-4">
+              <PlantKpiBar
+                plants={plants}
+                selectedPlantId={selectedPlant?.id || null}
+                onSelectPlant={(plant) => setSelectedPlant(plant)}
+              />
+              <PlantGeolocationMap
+                onSelectPlant={(plantId) => {
+                  const target = plants.find(p => p.id === plantId) || null;
+                  setSelectedPlant(target);
+                }}
+                onOpenPlantModal={(plantId) => {
+                  const target = plants.find(p => p.id === plantId) || null;
+                  setSelectedPlant(target);
+                }}
+                className="min-h-[580px]"
+              />
+            </div>
+          )}
+
           {/* Phase 1: Data Trust & Quality Governance Center */}
           {!isMobileMode && currentTab === 'data_trust' && (
             <DataTrustCenterModule />
@@ -488,6 +572,11 @@ export default function App() {
           {/* Phase 5: Operational Intelligence & Closed-Loop Optimization */}
           {!isMobileMode && currentTab === 'operational_intelligence' && (
             <OperationalIntelligenceModule />
+          )}
+
+          {/* Phase 6: AI Field Assistant & Mobile Intelligence */}
+          {!isMobileMode && currentTab === 'mobile_field_assistant' && (
+            <MobileFieldAssistantModule />
           )}
 
           {/* Phân hệ Develop: Develop Home */}

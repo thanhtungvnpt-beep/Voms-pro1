@@ -7,6 +7,7 @@ import { trustRouter } from './src/server/trustServices';
 import { controlTowerRouter } from './src/server/controlTowerServices';
 import { automationRouter } from './src/server/automationServices';
 import { operationalIntelligenceRouter } from './src/server/operationalIntelligenceServices';
+import { fieldAssistantRouter } from './src/server/mobileFieldAssistantServices';
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ app.use('/api/v1/control-tower', controlTowerRouter);
 app.use('/api/v1/automation', automationRouter);
 app.use('/api/v1/phase5', operationalIntelligenceRouter);
 app.use('/api/v1/operational-intelligence', operationalIntelligenceRouter);
+app.use('/api/v1/phase6', fieldAssistantRouter);
+app.use('/api/v1/field-assistant', fieldAssistantRouter);
 
 // In-memory Database for Production Telemetry
 let PLANTS_DB = [

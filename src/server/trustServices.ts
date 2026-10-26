@@ -294,7 +294,7 @@ Object.values(SEED_USERS).forEach(entry => {
 // 3. IN-MEMORY STATE STORE
 // =========================================================================
 
-let AUDIT_LOGS_DB: AuditLogEntry[] = [
+export let AUDIT_LOGS_DB: AuditLogEntry[] = [
   {
     eventId: 'EVT-INIT-001',
     correlationId: 'CORR-SYS-BOOT',
@@ -332,6 +332,7 @@ let AUDIT_LOGS_DB: AuditLogEntry[] = [
     isVerified: true
   }
 ];
+export { AUDIT_LOGS_DB as auditLogs };
 
 let APPROVAL_REQUESTS_DB: ApprovalRequest[] = [
   {
